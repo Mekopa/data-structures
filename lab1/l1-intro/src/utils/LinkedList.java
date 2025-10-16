@@ -30,16 +30,8 @@ public class LinkedList<T> implements List<T> {
     }
 
     @Override
-    public void add(T item) { 
-        Node newNode = new Node(item);
-        if (size == 0) {
-            head = newNode;
-            tail = newNode;
-        } else {
-            tail.next = newNode;
-            tail = newNode;
-        }
-        size = size + 1;
+    public void add(T item) {
+        throw new UnsupportedOperationException("Method needs to be implemented");
     }
 
     @Override
