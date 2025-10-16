@@ -9,6 +9,25 @@ Additional methods and variables can be created if needed.
 */
 public class LinkedList<T> implements List<T> {
     
+    private class Node {
+        T data;
+        Node next;
+
+        Node(T data){
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    private Node head;
+    private Node tail;
+    private int size;
+
+    public LinkedList(){
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
 
     @Override
     public void add(T item) {
