@@ -44,7 +44,15 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public T get(int index) {
-        throw new UnsupportedOperationException("Method needs to be implemented");
+       if (index < 0 || index > size - 1) {
+             throw new UnsupportedOperationException("invalid index");
+       } else {
+            Node currentNode = head;
+             for (int i = 0; i < index; i++) {
+                currentNode = currentNode.next;
+             }
+             return currentNode.data;
+       }
     }
 
     @Override
