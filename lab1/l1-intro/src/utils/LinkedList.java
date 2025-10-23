@@ -57,7 +57,31 @@ public class LinkedList<T> implements List<T> {
 
     @Override
     public boolean remove(T item) {
-        throw new UnsupportedOperationException("Method needs to be implemented");
+        if (size == 0) {
+            return false;
+        } else {
+            if (item.equals(head.data)){
+                head = head.next;
+                if (head == null){
+                    tail = null;
+                }
+                size = size - 1;
+                return true;
+            }
+            Node previusNode = head;
+            Node currentNode = head.next;
+            while (currentNode != null){
+                if(item.equals(currentNode.data)){
+                 previusNode.next = currentNode.next;
+                 size = size - 1;
+                 return true;
+                } else {
+                previusNode = currentNode;
+                currentNode = currentNode.next;
+                }
+            }
+            return false;
+        }
     }
 
     @Override
