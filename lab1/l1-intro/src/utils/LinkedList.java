@@ -72,7 +72,10 @@ public class LinkedList<T> implements List<T> {
             Node currentNode = head.next;
             while (currentNode != null){
                 if(item.equals(currentNode.data)){
-                 previusNode.next = currentNode.next;
+                previusNode.next = currentNode.next;
+                if(currentNode.equals(tail)){
+                    tail = previusNode;
+                }
                  size = size - 1;
                  return true;
                 } else {
