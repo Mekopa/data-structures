@@ -90,15 +90,31 @@ public class LinkedList<T> implements List<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            
+
+            private Node currentNode;
+
+            {
+                currentNode = head;
+            }
+
             @Override
             public boolean hasNext() {
-                throw new UnsupportedOperationException("Method needs to be implemented");
+                if(currentNode != null){
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
             @Override
             public T next() {
-                throw new UnsupportedOperationException("Method needs to be implemented");
+                if(!hasNext()){
+                    throw new UnsupportedOperationException("UPSS there is no node sorry");
+                }
+                Node tempCurrentNode;
+                tempCurrentNode = currentNode;
+                currentNode = currentNode.next;
+                return tempCurrentNode.data;
             }
         };
     }
