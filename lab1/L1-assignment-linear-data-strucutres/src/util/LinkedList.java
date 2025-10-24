@@ -71,7 +71,15 @@ public class LinkedList<E extends Comparable<E>>
         if (k < 0 || k >= size) {
             return false;
         }
-        throw new UnsupportedOperationException("Students need to implement add(int k, E e)");
+
+        if (k == 0) {
+            first = new Node<>(e, first);
+        } else {
+            Node<E> previous = first.findNode(k - 1);
+            previous.next = new Node<>(e, previous.next);
+        }
+        size = size + 1;
+        return true;
     }
 
     /**
