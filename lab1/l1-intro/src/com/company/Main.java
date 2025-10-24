@@ -5,7 +5,7 @@ import utils.*;
 public class Main {
 
     public static void main(String[] args) {
-        String filePath = "students_data.txt";
+        String filePath = "lab1/l1-intro/students_data.txt";
 
         Array<Student> students_arr = new Array<Student>();
 
@@ -23,6 +23,9 @@ public class Main {
 //
 //        System.out.println("============Tests with linked list implementation============");
 //        performTests(students_llist);
+        DataReader.readFromFile(filePath, students_llist);
+        System.out.println("============Tests with linked list implementation============");
+        performTests(students_llist);
     }
 
     private static void performTests(List<Student> students) {
