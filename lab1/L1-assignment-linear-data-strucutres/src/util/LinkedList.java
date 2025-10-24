@@ -136,7 +136,16 @@ public class LinkedList<E extends Comparable<E>>
      */
     @Override
     public E set(int k, E e) {
-        throw new UnsupportedOperationException("Students need to implement set(int k, E e)");
+        if (e == null) {
+            return null;
+        }
+        if (k < 0 || k >= size) {
+            return null;
+        }
+        Node<E> targetNode = first.findNode(k);
+        E oldElement = targetNode.element;
+        targetNode.element = e;
+        return oldElement;
     }
 
     /**
