@@ -336,6 +336,7 @@ public class LinkedList<E extends Comparable<E>>
     class Iterator implements java.util.Iterator<E> {
 
         private Node<E> iterPosition;
+        private Node<E> lastReturnedNode;
 
         Iterator() {
             iterPosition = first;
@@ -348,6 +349,10 @@ public class LinkedList<E extends Comparable<E>>
 
         @Override
         public E next() {
+            if (!hasNext()) {
+                throw new UnsupportedOperationException("No such element");
+            }
+            lastReturnedNode = iterPosition; 
             E d = iterPosition.element;
             iterPosition = iterPosition.next;
             return d;
@@ -355,7 +360,28 @@ public class LinkedList<E extends Comparable<E>>
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException("Students need to implement remove()");
+            if (lastReturnedNode == null) {
+                throw new IllegalStateException("next has not been called or remove has already been called");
+            }
+            if (lastReturnedNode == first) {
+                first = lastReturnedNode.next;
+                if (first == null) {
+                    last = null;
+                }
+            } else {
+                Node<E> previous = first;
+                while (previous != null && previous.next != lastReturnedNode) {
+                    previous = previous.next;
+                }
+                if (previous != null) {
+                    previous.next = lastReturnedNode.next;
+                    if (previous.next == null) { 
+                        last = previous;
+                    }
+                }
+            }
+            size = size - 1;
+            lastReturnedNode = null;
         }
     }
 
