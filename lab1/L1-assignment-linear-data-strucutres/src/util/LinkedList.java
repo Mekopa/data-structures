@@ -173,7 +173,29 @@ public class LinkedList<E extends Comparable<E>>
      */
     @Override
     public E remove(int k) {
-        throw new UnsupportedOperationException("Students need to implement remove(int k)");
+        if (k < 0 || k >= size) {
+            return null;
+        }
+
+        E removedElement;
+
+        if (k == 0) {
+            removedElement = first.element;
+            first = first.next;
+            if (first == null) {
+                last = null;
+            }
+        } else {
+            Node<E> previous = first.findNode(k - 1);
+            Node<E> targetNode = previous.next;
+            removedElement = targetNode.element;
+            previous.next = targetNode.next;
+            if (previous.next == null) {
+                last = previous;
+            }
+        }
+        size = size - 1;
+        return removedElement;
     }
 
     /**
