@@ -70,18 +70,18 @@ public class ManualTest {
                 + (cars.get(3).getPrice() + cars.get(4).getPrice()
                 + cars.get(5).getPrice()));
         // gradually open the following rows and test
-// cars.add(0, new Car("Mazda", "6",2007,50000,27000));
-// cars.add(6, new Car("Hyundai", "Lantra",1998,9500,777));
-// cars.set(4, c3);
-// cars.println("After insertions");
-// cars.remove(7);
-// cars.remove(0);
-// cars.println("After removals");
-// cars.remove(0); cars.remove(0); cars.remove(0);
-// cars.remove(0); cars.remove(0); cars.remove(0);
-// cars.println("After all removals");
-// cars.remove(0);
-// cars.println("After all removals");
+        cars.add(0, new Car("Mazda", "6",2007,50000,27000));
+        cars.add(6, new Car("Hyundai", "Lantra",1998,9500,777));
+        cars.set(4, c3);
+        cars.println("After insertions");
+        cars.remove(7);
+        cars.remove(0);
+        cars.println("After removals");
+        cars.remove(0); cars.remove(0); cars.remove(0);
+        cars.remove(0); cars.remove(0); cars.remove(0);
+        cars.println("After all removals");
+        cars.remove(0);
+        cars.println("After all removals");
     }
 
     void countRenault() {
