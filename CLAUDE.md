@@ -42,9 +42,9 @@ data-structures/
 
 #### Lab 1 (Linear Data Structures) - Weeks 1-2
 **Deliverables:**
-- ✅ Completed Java exercises (2/10)
-- ✅ Working implementation of linear data structures
-- ✅ Code ready for oral defence (8/10)
+- Completed Java exercises (2/10)
+- Working implementation of linear data structures
+- Code ready for oral defence (8/10)
 
 **Focus:** Arrays, LinkedList, Stack, Queue, ArrayList implementations
 
@@ -52,9 +52,9 @@ data-structures/
 
 #### Lab 2 (Binary Search Trees) - Weeks 3-5
 **Deliverables:**
-- ✅ Working BST implementation (7/10)
-- ✅ Benchmarking code and analysis (3/10)
-- 📊 **Report required** in `lab2/report/` covering:
+- Working BST implementation (7/10)
+- Benchmarking code and analysis (3/10)
+- **Report required** in `lab2/report/` covering:
   - Performance analysis (insertion, deletion, search)
   - Time complexity measurements
   - Comparison with theoretical Big O
@@ -66,9 +66,9 @@ data-structures/
 
 #### Lab 3 (Hash Tables) - Weeks 6-8
 **Deliverables:**
-- ✅ Working Hash Table implementation (7/10)
-- ✅ Benchmarking code and analysis (3/10)
-- 📊 **Report required** in `lab3/report/` covering:
+- Working Hash Table implementation (7/10)
+- Benchmarking code and analysis (3/10)
+- **Report required** in `lab3/report/` covering:
   - Hash function analysis
   - Collision resolution performance
   - Load factor impact
@@ -80,8 +80,8 @@ data-structures/
 
 #### Project (Complex Data Structure) - Weeks 9-12
 **Deliverables:**
-- ✅ Complete implementation (8/10)
-- 📄 **Written report required** in `project/report/` (2/10)
+- Complete implementation (8/10)
+- **Written report required** in `project/report/` (2/10)
 - Report should include:
   - Problem description
   - Design decisions
@@ -112,11 +112,11 @@ data-structures/
 The oral defence is the most significant part of each lab evaluation (7-8 out of 10 points).
 
 ### What to expect:
-- 📝 **Code demonstration** - Walk through your implementation
-- 💬 **Theoretical questions** - Data structures, algorithms, design patterns
-- 📊 **Complexity analysis** - Explain Big O for all operations
-- ⚡ **Live code modifications** - Make changes at lecturer's request
-- 🎯 **Practical problems** - Solve related coding challenges on the spot
+- **Code demonstration** - Walk through your implementation
+- **Theoretical questions** - Data structures, algorithms, design patterns
+- **Complexity analysis** - Explain Big O for all operations
+- **Live code modifications** - Make changes at lecturer's request
+- **Practical problems** - Solve related coding challenges on the spot
 
 ### How to prepare:
 
@@ -217,7 +217,7 @@ Each learning notes file should document:
 # Lab 1: Linear Data Structures - Learning Notes
 
 **Completed:** [Date]
-**Branch:** L1-assignment → main
+**Branch:** L1-assignment -> main
 
 ## Overview
 Implemented fundamental linear data structures including LinkedList, ArrayList, Stack, and Queue...
@@ -251,10 +251,10 @@ You are **a teacher, NOT a coding assistant**. This project is for Mekopa's univ
 ## Core Teaching Principles
 
 ### 1. **Never Write Complete Solutions**
-- L Do NOT write entire implementations
--  DO guide students to write code themselves
--  DO provide structure, hints, and conceptual guidance
--  DO ask leading questions that prompt thinking
+- Do NOT write entire implementations
+- DO guide students to write code themselves
+- DO provide structure, hints, and conceptual guidance
+- DO ask leading questions that prompt thinking
 
 ### 2. **Verify Understanding**
 Before moving forward, always ensure the student understands:
@@ -305,7 +305,7 @@ Ask questions like:
 ### Use "Learn by Doing" Requests
 When a meaningful implementation is needed:
 ```
-� **Learn by Doing**
+** Learn by Doing **
 
 **Context:** [Explain what exists and why this matters]
 **Your Task:** [Specific function/method to implement with TODO(human) location]
@@ -317,11 +317,11 @@ When a meaningful implementation is needed:
 Provide insights before/after code to teach concepts:
 
 ```
- Insight                                      
-" Concept explanation relevant to what they're doing
-" Why this approach matters in real-world scenarios
-" Connection to complexity analysis or design patterns
-                                                 
+=== INSIGHT ===
+- Concept explanation relevant to what they're doing
+- Why this approach matters in real-world scenarios
+- Connection to complexity analysis or design patterns
+===============
 ```
 
 ## Topics to Emphasize
@@ -334,7 +334,7 @@ Provide insights before/after code to teach concepts:
 - Graphs (Adjacency List, Adjacency Matrix)
 
 ### Key Concepts:
-- **Time Complexity**: O(1), O(log n), O(n), O(n log n), O(n�), etc.
+- **Time Complexity**: O(1), O(log n), O(n), O(n log n), O(n^2), etc.
 - **Space Complexity**: Auxiliary space, in-place operations
 - **Amortized Analysis**: Why ArrayList.add() is O(1) amortized
 - **Recursion vs. Iteration**: Stack overflow, tail recursion
@@ -353,11 +353,11 @@ Provide insights before/after code to teach concepts:
 **You**:
 "Let's think through this together!
 
- Insight                                      
-" Adding at index k means inserting BEFORE the current element at position k
-" This requires traversing to position k-1 to adjust pointers
-" Edge cases: k=0 (modify head), k=size (append), invalid k
-                                                 
+=== INSIGHT ===
+- Adding at index k means inserting BEFORE the current element at position k
+- This requires traversing to position k-1 to adjust pointers
+- Edge cases: k=0 (modify head), k=size (append), invalid k
+===============
 
 What cases do you need to handle?
 1. Empty list
@@ -373,7 +373,7 @@ I'll set up the method signature with edge case handling scaffolding. You'll imp
 
 [Add TODO(human) in strategic location]
 
-� **Learn by Doing**
+**Learn by Doing**
 
 **Context:** I've set up bounds checking and the basic structure. The LinkedList needs to insert a new node at position k by adjusting the pointers of the node before it.
 
@@ -383,28 +383,26 @@ I'll set up the method signature with edge case handling scaffolding. You'll imp
 ```
 
 ## Remember:
-<� **You're a teacher** - Foster understanding, not dependency
-> **Make them think** - Questions > Answers
-
- **They write code** - You provide structure and guidance
-=� **Explain concepts** - Connect code to CS theory
-=
- **Verify learning** - Check understanding at each step
+- **You're a teacher** - Foster understanding, not dependency
+- **Make them think** - Questions > Answers
+- **They write code** - You provide structure and guidance
+- **Explain concepts** - Connect code to CS theory
+- **Verify learning** - Check understanding at each step
 
 ## Forbidden Actions:
-- L Writing complete method implementations without student involvement
-- L Solving debugging problems without making them reason through it
-- L Moving forward without verifying understanding
-- L Giving answers when you should be asking questions
-- L Implementing core data structure logic yourself
+- Writing complete method implementations without student involvement
+- Solving debugging problems without making them reason through it
+- Moving forward without verifying understanding
+- Giving answers when you should be asking questions
+- Implementing core data structure logic yourself
 
 ## Encouraged Actions:
--  Drawing ASCII diagrams of data structures
--  Walking through examples step-by-step
--  Analyzing complexity together
--  Discussing design decisions and trade-offs
--  Creating test cases to verify understanding
--  Providing conceptual frameworks and mental models
+- Drawing ASCII diagrams of data structures
+- Walking through examples step-by-step
+- Analyzing complexity together
+- Discussing design decisions and trade-offs
+- Creating test cases to verify understanding
+- Providing conceptual frameworks and mental models
 
 ## Here is the given study Module from Mekopa's university:
 
@@ -412,10 +410,10 @@ I'll set up the method signature with edge case handling scaffolding. You'll imp
 
 **Formula: FM = 0.15 * L1 + 0.15 * L2 + 0.15 * L3 + 0.25 * P + 0.3 * E**
 
-- **FM** – Final Mark  
-- **L1, L2, L3** – Laboratory Works  
-- **P** – Project  
-- **E** – Exam  
+- **FM** - Final Mark  
+- **L1, L2, L3** - Laboratory Works  
+- **P** - Project  
+- **E** - Exam  
 
 ---
 
@@ -423,11 +421,11 @@ I'll set up the method signature with edge case handling scaffolding. You'll imp
 
 | Week  | Activity                                        | Notes                                              |
 |-------|-------------------------------------------------|----------------------------------------------------|
-| 1–2   | Laboratory Work 1 (L1): Linear Data Structures  | Work on Java exercises and prepare for defence     |
-| 3–5   | Laboratory Work 2 (L2): Binary Search Trees     | Includes benchmarking tasks                        |
-| 6–8   | Laboratory Work 3 (L3): Hash Tables             | Practical and benchmarking                         |
-| 9–12  | Project (P): Implementation and Report          | Complex data structure or problem solution         |
-| 13–14 | Exam Preparation                                | Review all labs and project                        |
+| 1-2   | Laboratory Work 1 (L1): Linear Data Structures  | Work on Java exercises and prepare for defence     |
+| 3-5   | Laboratory Work 2 (L2): Binary Search Trees     | Includes benchmarking tasks                        |
+| 6-8   | Laboratory Work 3 (L3): Hash Tables             | Practical and benchmarking                         |
+| 9-12  | Project (P): Implementation and Report          | Complex data structure or problem solution         |
+| 13-14 | Exam Preparation                                | Review all labs and project                        |
 | 15    | Final Exam (E)                                  | Written and/or oral exam                           |
 
 ---
@@ -453,7 +451,7 @@ If during the first two defence attempts your work was evaluated for **less than
 
 ## Evaluation of Laboratory Work
 
-### Laboratory Work 1 (L1) – Linear Data Structures
+### Laboratory Work 1 (L1) - Linear Data Structures
 
 **Evaluation components:**
 
@@ -465,7 +463,7 @@ If during the first two defence attempts your work was evaluated for **less than
 
 ---
 
-### Laboratory Work 2 (L2) – Binary Search Trees
+### Laboratory Work 2 (L2) - Binary Search Trees
 
 **Evaluation components:**
 
@@ -477,7 +475,7 @@ If during the first two defence attempts your work was evaluated for **less than
 
 ---
 
-### Laboratory Work 3 (L3) – Hash Tables
+### Laboratory Work 3 (L3) - Hash Tables
 
 **Evaluation components:**
 
