@@ -10,6 +10,9 @@ import java.util.Comparator;
 import java.util.Locale;
 
 import util.Ks;
+import util.Stack;
+import util.ArrayStack;
+import util.LinkedListStack;
 import models.*;
 
 public class ManualTest {
@@ -19,6 +22,7 @@ public class ManualTest {
     void execute() {
         createCars();
         createCarList();
+        testStackOperations();
 // countRenault();
 // appendCarList();
 // checkCarMarketFilters();
@@ -34,7 +38,7 @@ public class ManualTest {
         Car c6 = new Car();
         c4.parse("Renault Laguna 2001 115900 7500");
         c5.parse("Renault Megane 1946 365100 9500");
-        c6.parse("Honda Civic 2007 36400 8500.3");
+        c6.parse("Honda Civic 2007 36400 8500,3");
 
         Ks.oun(c1);
         Ks.oun(c2);
@@ -70,18 +74,161 @@ public class ManualTest {
                 + (cars.get(3).getPrice() + cars.get(4).getPrice()
                 + cars.get(5).getPrice()));
         // gradually open the following rows and test
-// cars.add(0, new Car("Mazda", "6",2007,50000,27000));
-// cars.add(6, new Car("Hyundai", "Lantra",1998,9500,777));
-// cars.set(4, c3);
-// cars.println("After insertions");
-// cars.remove(7);
-// cars.remove(0);
-// cars.println("After removals");
-// cars.remove(0); cars.remove(0); cars.remove(0);
-// cars.remove(0); cars.remove(0); cars.remove(0);
-// cars.println("After all removals");
-// cars.remove(0);
-// cars.println("After all removals");
+        cars.add(0, new Car("Mazda", "6",2007,50000,27000));
+        cars.add(6, new Car("Hyundai", "Lantra",1998,9500,777));
+        cars.set(4, c3);
+        cars.println("After insertions");
+        cars.remove(7);
+        cars.remove(0);
+        cars.println("After removals");
+        cars.remove(0); cars.remove(0); cars.remove(0);
+        cars.remove(0); cars.remove(0); cars.remove(0);
+        cars.println("After all removals");
+        cars.remove(0);
+        cars.println("After all removals");
+    }
+
+    void testStackOperations() {
+        Ks.oun("\n========================================");
+        Ks.oun("  STACK INTEGRATION TESTS (Car)");
+        Ks.oun("========================================\n");
+
+        // Test 1: Stack with Car objects
+        testStackWithCars();
+
+        // Test 2: Two-Stack Garage Problem
+        testTwoStackGarage();
+
+        Ks.oun("\n✓✓✓ ALL STACK INTEGRATION TESTS COMPLETED ✓✓✓\n");
+    }
+
+    void testStackWithCars() {
+        Ks.oun("--- Test 1: Stack with Car Objects ---\n");
+
+        // Create some cars for testing
+        Car c1 = new Car("Renault", "Laguna", 1997, 50000, 1700);
+        Car c2 = new Car("Toyota", "Corolla", 2001, 20000, 8500);
+        Car c3 = new Car("Honda", "Civic", 2007, 36400, 8500);
+        Car c4 = new Car("Ford", "Focus", 2009, 40000, 16000);
+        Car c5 = new Car("Audi", "A6", 2006, 87000, 36000);
+
+        // Test ArrayStack with Cars
+        Ks.oun("Testing ArrayStack<Car>:");
+        Stack<Car> carStack = new ArrayStack<>();
+
+        carStack.push(c1);
+        Ks.oun("Pushed: " + c1.getMake() + " " + c1.getModel());
+        carStack.push(c2);
+        Ks.oun("Pushed: " + c2.getMake() + " " + c2.getModel());
+        carStack.push(c3);
+        Ks.oun("Pushed: " + c3.getMake() + " " + c3.getModel());
+        carStack.push(c4);
+        Ks.oun("Pushed: " + c4.getMake() + " " + c4.getModel());
+        carStack.push(c5);
+        Ks.oun("Pushed: " + c5.getMake() + " " + c5.getModel());
+
+        // Peek at top
+        Car topCar = carStack.peek();
+        Ks.oun("\nTop car (peek): " + topCar.getMake() + " " + topCar.getModel());
+
+        // Pop all in LIFO order
+        Ks.oun("\nPopping all cars (LIFO - reverse order):");
+        int count = 1;
+        while (!carStack.isEmpty()) {
+            Car poppedCar = carStack.pop();
+            Ks.oun(count++ + ". " + poppedCar);
+        }
+
+        // Test LinkedListStack with Cars
+        Ks.oun("\nTesting LinkedListStack<Car>:");
+        Stack<Car> linkedCarStack = new LinkedListStack<>();
+
+        linkedCarStack.push(c1);
+        linkedCarStack.push(c2);
+        linkedCarStack.push(c3);
+        Ks.oun("Pushed 3 cars");
+        Car topLinked = linkedCarStack.peek();
+        if (topLinked != null) {
+            Ks.oun("Peek: " + topLinked.getMake() + " " + topLinked.getModel());
+        }
+        Ks.oun("Pop: " + linkedCarStack.pop().getMake());
+        Ks.oun("Pop: " + linkedCarStack.pop().getMake());
+        Ks.oun("Pop: " + linkedCarStack.pop().getMake());
+
+        Ks.oun("\n✓ Car Stack test PASSED\n");
+    }
+
+    void testTwoStackGarage() {
+        Ks.oun("--- Test 2: Two-Stack Garage Problem ---\n");
+
+        // Create garage with cars
+        Stack<Car> garage = new ArrayStack<>();
+
+        Car c1 = new Car("Ford", "Fiesta", 2005, 100000, 3000);
+        Car c2 = new Car("Renault", "Laguna", 1997, 50000, 1700);
+        Car c3 = new Car("Toyota", "Corolla", 2001, 20000, 8500);
+        Car c4 = new Car("Honda", "Civic", 2007, 36400, 8500);
+        Car c5 = new Car("Audi", "A6", 2006, 87000, 36000);
+        Car c6 = new Car("BMW", "X5", 2010, 50000, 45000);
+
+        Ks.oun("Parking cars in single-lane garage (LIFO):");
+        garage.push(c1);
+        Ks.oun("Parked: " + c1.getMake() + " " + c1.getModel());
+        garage.push(c2);
+        Ks.oun("Parked: " + c2.getMake() + " " + c2.getModel());
+        garage.push(c3);
+        Ks.oun("Parked: " + c3.getMake() + " " + c3.getModel() + " ← TARGET CAR");
+        garage.push(c4);
+        Ks.oun("Parked: " + c4.getMake() + " " + c4.getModel());
+        garage.push(c5);
+        Ks.oun("Parked: " + c5.getMake() + " " + c5.getModel());
+        garage.push(c6);
+        Ks.oun("Parked: " + c6.getMake() + " " + c6.getModel());
+
+        Ks.oun("\nProblem: We need to get the Toyota Corolla out!");
+        Ks.oun("It's buried under 3 cars (Honda, Audi, BMW)\n");
+
+        // Use two-stack algorithm
+        Car retrieved = getCarFromGarage(garage, "Toyota");
+
+        Ks.oun("\n✓ Successfully retrieved: " + retrieved.getMake() + " " + retrieved.getModel());
+        Ks.oun("✓ Two-Stack Garage test PASSED\n");
+    }
+
+    /**
+     * Two-stack algorithm to retrieve a specific car from garage
+     * Demonstrates using multiple stacks to solve a problem
+     */
+    Car getCarFromGarage(Stack<Car> garage, String targetMake) {
+        // Create temporary stack (street parking)
+        Stack<Car> street = new ArrayStack<>();
+
+        Ks.oun("Moving blocking cars to street:");
+
+        // Move cars to street until we find the target
+        while (!garage.isEmpty()) {
+            Car current = garage.peek();
+            if (current.getMake().equals(targetMake)) {
+                break; // Found it!
+            }
+            Car moved = garage.pop();
+            street.push(moved);
+            Ks.oun("  → Moved to street: " + moved.getMake() + " " + moved.getModel());
+        }
+
+        // Get the target car
+        Car myCar = garage.pop();
+        Ks.oun("\n✓ Retrieved target: " + myCar.getMake() + " " + myCar.getModel());
+
+        // Put blocking cars back
+        Ks.oun("\nReturning cars from street to garage:");
+        while (!street.isEmpty()) {
+            Car returned = street.pop();
+            garage.push(returned);
+            Ks.oun("  ← Returned to garage: " + returned.getMake() + " " + returned.getModel());
+        }
+
+        return myCar;
     }
 
     void countRenault() {

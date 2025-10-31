@@ -157,6 +157,36 @@ The oral defence is the most significant part of each lab evaluation (7-8 out of
 - Work is done on the lab branch, then merged to `main` when complete
 - Use descriptive commit messages that reflect the learning process
 
+### Milestone-Based Committing Strategy:
+
+Commits should be made at **complete, logical milestones** to create meaningful learning documentation.
+
+**Commit When:**
+- A complete interface is designed (e.g., Stack<E> interface with all methods)
+- ALL implementations of a task are complete AND tested (don't commit half-done work)
+- A logical unit of work is finished and functional
+
+**Do NOT Commit When:**
+- Only one of multiple required implementations is done
+- Tests are not yet written for implementations
+- Work is incomplete or partially functional
+
+**Example - Lab 1 Stack Task (worth 2 points):**
+- Task 3: Create Stack<E> interface → Commit when interface is complete
+- Task 4: Create ArrayStack + LinkedListStack + Tests → Commit ONLY when all three are done
+  - NOT after just ArrayStack
+  - NOT after ArrayStack + LinkedListStack without tests
+  - YES after ArrayStack + LinkedListStack + Tests all working
+
+**Commit Message Format:**
+Each commit message should document what the student learned during that milestone:
+- Concepts understood (e.g., interfaces vs classes, LIFO principle)
+- Design decisions made (e.g., IS-A vs HAS-A relationships)
+- Implementation insights (e.g., why methods have specific parameters/return types)
+- Problem-solving approaches learned
+
+This creates a detailed learning history that demonstrates understanding during oral defense.
+
 ### Learning Notes Generation:
 When merging a lab branch to `main` via Pull Request, **automatically generate comprehensive learning notes**:
 

@@ -68,10 +68,18 @@ public class LinkedList<E extends Comparable<E>>
         if (e == null) {
             return false;
         }
-        if (k < 0 || k >= size) {
+        if (k < 0 || k > size) {
             return false;
         }
-        throw new UnsupportedOperationException("Students need to implement add(int k, E e)");
+
+        if (k == 0) {
+            first = new Node<>(e, first);
+        } else {
+            Node<E> previous = first.findNode(k - 1);
+            previous.next = new Node<>(e, previous.next);
+        }
+        size = size + 1;
+        return true;
     }
 
     /**
@@ -128,7 +136,16 @@ public class LinkedList<E extends Comparable<E>>
      */
     @Override
     public E set(int k, E e) {
-        throw new UnsupportedOperationException("Students need to implement set(int k, E e)");
+        if (e == null) {
+            return null;
+        }
+        if (k < 0 || k >= size) {
+            return null;
+        }
+        Node<E> targetNode = first.findNode(k);
+        E oldElement = targetNode.element;
+        targetNode.element = e;
+        return oldElement;
     }
 
     /**
@@ -156,7 +173,29 @@ public class LinkedList<E extends Comparable<E>>
      */
     @Override
     public E remove(int k) {
-        throw new UnsupportedOperationException("Students need to implement remove(int k)");
+        if (k < 0 || k >= size) {
+            return null;
+        }
+
+        E removedElement;
+
+        if (k == 0) {
+            removedElement = first.element;
+            first = first.next;
+            if (first == null) {
+                last = null;
+            }
+        } else {
+            Node<E> previous = first.findNode(k - 1);
+            Node<E> targetNode = previous.next;
+            removedElement = targetNode.element;
+            previous.next = targetNode.next;
+            if (previous.next == null) {
+                last = previous;
+            }
+        }
+        size = size - 1;
+        return removedElement;
     }
 
     /**
@@ -297,6 +336,7 @@ public class LinkedList<E extends Comparable<E>>
     class Iterator implements java.util.Iterator<E> {
 
         private Node<E> iterPosition;
+        private Node<E> lastReturnedNode;
 
         Iterator() {
             iterPosition = first;
@@ -309,6 +349,10 @@ public class LinkedList<E extends Comparable<E>>
 
         @Override
         public E next() {
+            if (!hasNext()) {
+                throw new UnsupportedOperationException("No such element");
+            }
+            lastReturnedNode = iterPosition; 
             E d = iterPosition.element;
             iterPosition = iterPosition.next;
             return d;
@@ -316,7 +360,28 @@ public class LinkedList<E extends Comparable<E>>
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException("Students need to implement remove()");
+            if (lastReturnedNode == null) {
+                throw new IllegalStateException("next has not been called or remove has already been called");
+            }
+            if (lastReturnedNode == first) {
+                first = lastReturnedNode.next;
+                if (first == null) {
+                    last = null;
+                }
+            } else {
+                Node<E> previous = first;
+                while (previous != null && previous.next != lastReturnedNode) {
+                    previous = previous.next;
+                }
+                if (previous != null) {
+                    previous.next = lastReturnedNode.next;
+                    if (previous.next == null) { 
+                        last = previous;
+                    }
+                }
+            }
+            size = size - 1;
+            lastReturnedNode = null;
         }
     }
 
