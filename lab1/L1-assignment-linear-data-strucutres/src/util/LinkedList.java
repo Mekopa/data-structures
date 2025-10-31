@@ -68,7 +68,7 @@ public class LinkedList<E extends Comparable<E>>
         if (e == null) {
             return false;
         }
-        if (k < 0 || k >= size) {
+        if (k < 0 || k > size) {
             return false;
         }
 
