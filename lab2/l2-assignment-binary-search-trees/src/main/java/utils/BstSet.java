@@ -84,11 +84,20 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
      * Checks if all elements of the input set exist in the set
      *
      * @param set input set
-     * @return
+     * @return true if all elements from input set exist in this set, false otherwise
      */
     @Override
     public boolean containsAll(Set<E> set) {
-        throw new UnsupportedOperationException("Students need to implement containsAll(Set<E> set)");
+        if (set == null) {
+            throw new IllegalArgumentException("Set is null in containsAll(Set<E> set)");
+        }
+        // Check if each element from input set exists in this set
+        for (E element : set) {
+            if (!this.contains(element)) {
+                return false;  // Found an element that doesn't exist
+            }
+        }
+        return true;  // All elements were found
     }
 
     /**
@@ -112,7 +121,13 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
      */
     @Override
     public void addAll(Set<E> set) {
-        throw new UnsupportedOperationException("Students need to implement addAll(Set<E> set)");
+        if (set == null) {
+            throw new IllegalArgumentException("Set is null in addAll(Set<E> set)");
+        }
+        // Iterate through input set and add each element
+        for (E element : set) {
+            this.add(element);
+        }
     }
 
     private BstNode<E> addRecursive(E element, BstNode<E> node) {
@@ -151,7 +166,24 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
      */
     @Override
     public void retainAll(Set<E> set) {
-        throw new UnsupportedOperationException("Students need to implement retainAll(Set<E> set)");
+        if (set == null) {
+            throw new IllegalArgumentException("Set is null in retainAll(Set<E> set)");
+        }
+
+        // Cannot remove while iterating, so collect elements to remove first
+        java.util.ArrayList<E> toRemove = new java.util.ArrayList<>();
+
+        // Find all elements in this set that are NOT in input set
+        for (E element : this) {
+            if (!set.contains(element)) {
+                toRemove.add(element);
+            }
+        }
+
+        // Now remove all collected elements
+        for (E element : toRemove) {
+            this.remove(element);
+        }
     }
 
     private BstNode<E> removeRecursive(E element, BstNode<E> node) {
@@ -389,7 +421,20 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
      */
     @Override
     public Set<E> headSet(E element) {
-        throw new UnsupportedOperationException("Students need to implement headSet()");
+        if (element == null) {
+            throw new IllegalArgumentException("Element is null in headSet(E element)");
+        }
+
+        BstSet<E> result = new BstSet<>(c);  // Create new set with same comparator
+
+        // Traverse this set and add elements that are less than the limit
+        for (E e : this) {
+            if (c.compare(e, element) < 0) {  // e < element
+                result.add(e);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -401,7 +446,23 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
      */
     @Override
     public Set<E> subSet(E element1, E element2) {
-        throw new UnsupportedOperationException("Students need to implement subSet()");
+        if (element1 == null || element2 == null) {
+            throw new IllegalArgumentException("Elements cannot be null in subSet(E element1, E element2)");
+        }
+        if (c.compare(element1, element2) > 0) {
+            throw new IllegalArgumentException("element1 must be <= element2");
+        }
+
+        BstSet<E> result = new BstSet<>(c);  // Create new set with same comparator
+
+        // Traverse this set and add elements in range [element1, element2)
+        for (E e : this) {
+            if (c.compare(e, element1) >= 0 && c.compare(e, element2) < 0) {  // element1 <= e < element2
+                result.add(e);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -412,7 +473,20 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
      */
     @Override
     public Set<E> tailSet(E element) {
-        throw new UnsupportedOperationException("Students need to implement tailSet()");
+        if (element == null) {
+            throw new IllegalArgumentException("Element is null in tailSet(E element)");
+        }
+
+        BstSet<E> result = new BstSet<>(c);  // Create new set with same comparator
+
+        // Traverse this set and add elements that are greater than or equal to the limit
+        for (E e : this) {
+            if (c.compare(e, element) >= 0) {  // e >= element
+                result.add(e);
+            }
+        }
+
+        return result;
     }
 
     /**
