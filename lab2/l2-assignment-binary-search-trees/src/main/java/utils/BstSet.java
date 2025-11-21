@@ -138,7 +138,10 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
      */
     @Override
     public void remove(E element) {
-        throw new UnsupportedOperationException("Students need to implement remove(E element)");
+        if (element == null) {
+            throw new IllegalArgumentException("Element is null in remove(E element)");
+        }
+        root = removeRecursive(element, root);
     }
 
     /**
@@ -152,7 +155,49 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
     }
 
     private BstNode<E> removeRecursive(E element, BstNode<E> node) {
-        throw new UnsupportedOperationException("Students need to implement removeRecursive(E element, BstNode<E>n)");
+        // Base case: element not found in tree
+        if (node == null) {
+            return null;
+        }
+
+        // Search for the element (same pattern as addRecursive)
+        int cmp = c.compare(element, node.element);
+
+        if (cmp < 0) {
+            // Element is in the left subtree
+            node.left = removeRecursive(element, node.left);
+            return node;
+        } else if (cmp > 0) {
+            // Element is in the right subtree
+            node.right = removeRecursive(element, node.right);
+            return node;
+        } else {
+            // CASE 1: Node is a LEAF (no children)
+            if(node.left == null && node.right == null){
+                size--;
+                return null;
+            }
+
+            // CASE 2: Node has ONE child
+            if(node.right == null){
+                size--;
+                return node.left;
+            }
+
+            // CASE 2: Node has ONE child (left is null, only right exists)
+            if(node.left == null){
+                size--;
+                return node.right;
+            }
+
+            // CASE 3: Node has TWO children (both left and right exist)
+            // Use predecessor approach
+            BstNode<E> max = getMax(node.left);  // Find max in left subtree (predecessor)
+            node.element = max.element;           // Replace this node's value
+            node.left = removeMax(node.left);     // Remove predecessor from left subtree
+            size--;                                // Decrement size
+            return node;                           // Return this node with new value
+        }
     }
 
     /**
