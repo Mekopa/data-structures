@@ -557,7 +557,12 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
 
         @Override
         public void remove() {
-            throw new UnsupportedOperationException("Students need to implement remove()");
+            if (last == null) {
+                throw new IllegalStateException("next() must be called before remove()");
+            }
+            // Remove the last element returned by next()
+            BstSet.this.remove(last.element);  // Call outer class's remove method
+            last = null;  // Prevent removing same element twice
         }
 
         private void toStack(BstNode<E> node) {
