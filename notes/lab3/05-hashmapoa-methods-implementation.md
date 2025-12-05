@@ -105,3 +105,54 @@ private int findPosition(K key, boolean stopAtDeleted)
 | `stopAtDeleted = false` | Skip DELETED slots (for searching/removing) |
 
 **For remove:** Use `false` - we need to find the actual key, not stop at deleted slots.
+
+---
+
+## Method 2: containsValue(Object value)
+
+### What It Does
+Checks if ANY key has this value. Returns true/false.
+
+### Simpler Than HashMap!
+
+No chains to walk through - just one loop:
+
+```java
+for (int i = 0; i < table.length; i++) {
+    if (table[i] != null && !DELETED.equals(table[i])) {
+        if (table[i].value.equals(value)) {
+            return true;
+        }
+    }
+}
+return false;
+```
+
+### Skip These Slots
+
+| Slot State | Action |
+|------------|--------|
+| `null` | Skip - empty |
+| `DELETED` | Skip - no data |
+| `Entry` | Check the value |
+
+### Visual
+
+```
+containsValue(Car2)
+
+[0] → Car1      ← check: no
+[1] → null      ← skip
+[2] → DELETED   ← skip
+[3] → Car2      ← check: YES! return true
+[4] → Car3
+```
+
+### Comparison: HashMap vs HashMapOa
+
+| HashMap | HashMapOa |
+|---------|-----------|
+| Two loops (slots + chains) | One loop (slots only) |
+| `while (node != null)` | `if (not null && not DELETED)` |
+
+**Time complexity:** O(n) for both - must check all values.
