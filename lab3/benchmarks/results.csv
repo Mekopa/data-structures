@@ -1,0 +1,5 @@
+elementCount,removeCustomHashMap_us,removeCustomHashMap_error,removeJavaHashMap_us,removeJavaHashMap_error
+10000,164.703,159.832,99.630,25.210
+20000,612.357,299.610,223.154,126.543
+40000,974.472,1321.127,483.432,313.546
+80000,1662.817,1563.213,1058.088,889.833
