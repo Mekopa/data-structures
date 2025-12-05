@@ -7,5 +7,6 @@
 
 # Compiled output
 out/
+target/
 
 cc_chat_history/
