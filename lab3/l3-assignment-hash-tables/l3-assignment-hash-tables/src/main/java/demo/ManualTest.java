@@ -45,6 +45,9 @@ public class ManualTest {
             carsMap.put(carsIds[id], cars[id]);
         }
 
+        Ks.oun("=== HashMap (Separate Chaining) Tests ===");
+        Ks.oun("");
+
         Ks.oun("Distribution of key-value pairs in the hash map:");
         carsMap.println("");
         Ks.oun("Does key exists in the hash map?");
@@ -58,6 +61,45 @@ public class ManualTest {
         Ks.oun(carsMap.get(carsIds[7]));
         Ks.oun("Print the string of key-value pairs:");
         Ks.ounn(carsMap);
+
+        // ========== TEST: containsValue() ==========
+        Ks.oun("--- Testing containsValue() ---");
+        Ks.oun("containsValue(car1 - exists): " + carsMap.containsValue(cars[0]));
+        Ks.oun("containsValue(car2 - exists): " + carsMap.containsValue(cars[1]));
+        Car nonExistentCar = new Car("Fake", "Car", 2020, 1000, 500);
+        Ks.oun("containsValue(fake car - not exists): " + carsMap.containsValue(nonExistentCar));
+        Ks.oun("");
+
+        // ========== TEST: replace() ==========
+        Ks.oun("--- Testing replace() ---");
+        Ks.oun("Before replace - get(TA156): " + carsMap.get(carsIds[0]));
+        Car newCar = new Car("BMW", "X5", 2022, 5000, 50000);
+        boolean replaced = carsMap.replace(carsIds[0], cars[0], newCar);
+        Ks.oun("replace(TA156, car1, newCar) - should be true: " + replaced);
+        Ks.oun("After replace - get(TA156): " + carsMap.get(carsIds[0]));
+
+        boolean replaceFail = carsMap.replace(carsIds[1], cars[0], newCar); // wrong oldValue
+        Ks.oun("replace(TA102, car1, newCar) - wrong oldValue, should be false: " + replaceFail);
+
+        boolean replaceNoKey = carsMap.replace("FAKE_KEY", cars[0], newCar);
+        Ks.oun("replace(FAKE_KEY, ...) - key not exists, should be false: " + replaceNoKey);
+        Ks.oun("");
+
+        // ========== TEST: remove() ==========
+        Ks.oun("--- Testing remove() ---");
+        Ks.oun("Size before remove: " + carsMap.size());
+        Ks.oun("contains(TA102) before remove: " + carsMap.contains(carsIds[1]));
+        Car removed = carsMap.remove(carsIds[1]);
+        Ks.oun("remove(TA102) returned: " + removed);
+        Ks.oun("contains(TA102) after remove: " + carsMap.contains(carsIds[1]));
+        Ks.oun("Size after remove: " + carsMap.size());
+
+        Car removedAgain = carsMap.remove(carsIds[1]);
+        Ks.oun("remove(TA102) again - should be null: " + removedAgain);
+
+        Car removeNonExistent = carsMap.remove("FAKE_KEY");
+        Ks.oun("remove(FAKE_KEY) - should be null: " + removeNonExistent);
+        Ks.oun("");
     }
 
     private static void executeCarMapOaTests(String[] carsIds, Car[] cars) {
@@ -74,6 +116,9 @@ public class ManualTest {
             carsMapOa.put(carsIds[id], cars[id]);
         }
 
+        Ks.oun("=== HashMapOa (Open Addressing) Tests ===");
+        Ks.oun("");
+
         Ks.oun("Distribution of key-value pairs in the hash map based on the open addressing:");
         carsMapOa.println("");
         Ks.oun("Does key exists in the hash map?");
@@ -87,5 +132,51 @@ public class ManualTest {
         Ks.oun(carsMapOa.get(carsIds[7]));
         Ks.oun("Print the string of key-value pairs:");
         Ks.ounn(carsMapOa);
+
+        // ========== TEST: containsValue() ==========
+        Ks.oun("--- Testing containsValue() ---");
+        Ks.oun("containsValue(car1 - exists): " + carsMapOa.containsValue(cars[0]));
+        Ks.oun("containsValue(car2 - exists): " + carsMapOa.containsValue(cars[1]));
+        Car nonExistentCar = new Car("Fake", "Car", 2020, 1000, 500);
+        Ks.oun("containsValue(fake car - not exists): " + carsMapOa.containsValue(nonExistentCar));
+        Ks.oun("");
+
+        // ========== TEST: replace() ==========
+        Ks.oun("--- Testing replace() ---");
+        Ks.oun("Before replace - get(TA156): " + carsMapOa.get(carsIds[0]));
+        Car newCar = new Car("BMW", "X5", 2022, 5000, 50000);
+        boolean replaced = carsMapOa.replace(carsIds[0], cars[0], newCar);
+        Ks.oun("replace(TA156, car1, newCar) - should be true: " + replaced);
+        Ks.oun("After replace - get(TA156): " + carsMapOa.get(carsIds[0]));
+
+        boolean replaceFail = carsMapOa.replace(carsIds[1], cars[0], newCar); // wrong oldValue
+        Ks.oun("replace(TA102, car1, newCar) - wrong oldValue, should be false: " + replaceFail);
+
+        boolean replaceNoKey = carsMapOa.replace("FAKE_KEY", cars[0], newCar);
+        Ks.oun("replace(FAKE_KEY, ...) - key not exists, should be false: " + replaceNoKey);
+        Ks.oun("");
+
+        // ========== TEST: remove() ==========
+        Ks.oun("--- Testing remove() ---");
+        Ks.oun("Size before remove: " + carsMapOa.size());
+        Ks.oun("contains(TA102) before remove: " + carsMapOa.contains(carsIds[1]));
+        Car removed = carsMapOa.remove(carsIds[1]);
+        Ks.oun("remove(TA102) returned: " + removed);
+        Ks.oun("contains(TA102) after remove: " + carsMapOa.contains(carsIds[1]));
+        Ks.oun("Size after remove: " + carsMapOa.size());
+
+        Car removedAgain = carsMapOa.remove(carsIds[1]);
+        Ks.oun("remove(TA102) again - should be null: " + removedAgain);
+
+        Car removeNonExistent = carsMapOa.remove("FAKE_KEY");
+        Ks.oun("remove(FAKE_KEY) - should be null: " + removeNonExistent);
+        Ks.oun("");
+
+        // ========== TEST: remove() doesn't break search (DELETED marker test) ==========
+        Ks.oun("--- Testing DELETED marker (Open Addressing specific) ---");
+        Ks.oun("After removing TA102, can we still find items that were inserted after it?");
+        Ks.oun("contains(TA178): " + carsMapOa.contains(carsIds[2]));
+        Ks.oun("get(TA178): " + carsMapOa.get(carsIds[2]));
+        Ks.oun("");
     }
 }

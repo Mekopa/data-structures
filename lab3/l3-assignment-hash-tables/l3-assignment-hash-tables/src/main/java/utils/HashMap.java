@@ -175,7 +175,39 @@ public class HashMap<K, V> implements EvaluableMap<K, V> {
      */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException("Students need to implement remove(K key)");
+        if (key == null) {
+            throw new IllegalArgumentException("Key is null in remove(K key)");
+        }
+
+        int index = HashManager.hash(key.hashCode(), table.length, ht);
+        Node<K, V> current = table[index];
+
+        // Case: empty slot
+        if (current == null) {
+            return null;
+        }
+
+        // Case: key is at head
+        if (current.key.equals(key)) {
+            V value = current.value;
+            table[index] = current.next;
+            size--;
+            return value;
+        }
+
+        // Case: key is somewhere in the chain
+        while (current.next != null) {
+            if (current.next.key.equals(key)) {
+                V value = current.next.value;
+                current.next = current.next.next;
+                size--;
+                return value;
+            }
+            current = current.next;
+        }
+
+        // Not found
+        return null;
     }
 
     /**
@@ -232,11 +264,32 @@ public class HashMap<K, V> implements EvaluableMap<K, V> {
     }
 
     public boolean replace(K key, V oldValue, V newValue) {
-        throw new UnsupportedOperationException("Students need to implement replace(K key, V oldValue, V newValue)");
+        if (key == null) {
+            throw new IllegalArgumentException("Key is null in replace(K key, V oldValue, V newValue)");
+        }
+
+        int index = HashManager.hash(key.hashCode(), table.length, ht);
+        Node<K, V> node = getInChain(key, table[index]);
+
+        if (node != null && node.value.equals(oldValue)) {
+            node.value = newValue;
+            return true;
+        }
+
+        return false;
     }
 
     public boolean containsValue(Object value) {
-        throw new UnsupportedOperationException("Students need to implement containsValue(Object value)");
+        for (int i = 0; i < table.length; i++) {
+            Node<K, V> node = table[i];
+            while (node != null) {
+                if (node.value.equals(value)) {
+                    return true;
+                }
+                node = node.next;
+            }
+        }
+        return false;
     }
 
     /**
