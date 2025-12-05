@@ -269,7 +269,20 @@ public class HashMapOa<K, V> implements EvaluableMap<K, V> {
     }
 
     public boolean replace(K key, V oldValue, V newValue) {
-        throw new UnsupportedOperationException("Students must implement the method replace(K key,  V oldValue, V newValue)");
+        if (key == null) {
+            throw new IllegalArgumentException("Key is null in replace(K key, V oldValue, V newValue)");
+        }
+
+        int position = findPosition(key, false);
+
+        if (position != -1 && table[position] != null && !DELETED.equals(table[position])) {
+            if (table[position].value.equals(oldValue)) {
+                table[position].value = newValue;
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean containsValue(Object value) {
