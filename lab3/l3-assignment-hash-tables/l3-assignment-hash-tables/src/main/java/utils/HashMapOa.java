@@ -163,7 +163,20 @@ public class HashMapOa<K, V> implements EvaluableMap<K, V> {
 
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException("Students must implement the method remove(K key)");
+        if (key == null) {
+            throw new IllegalArgumentException("Key is null in remove(K key)");
+        }
+
+        int position = findPosition(key, false);
+
+        if (position != -1 && table[position] != null && !DELETED.equals(table[position])) {
+            V value = table[position].value;
+            table[position] = DELETED;
+            size--;
+            return value;
+        }
+
+        return null;
     }
 
     @Override
