@@ -156,3 +156,69 @@ containsValue(Car2)
 | `while (node != null)` | `if (not null && not DELETED)` |
 
 **Time complexity:** O(n) for both - must check all values.
+
+---
+
+## Method 3: replace(K key, V oldValue, V newValue)
+
+### What It Does
+Replace value **only if** current value matches `oldValue`.
+
+### Same Logic as HashMap
+
+1. Find the key
+2. Check if current value equals oldValue
+3. If yes → replace, return true
+4. If no → return false
+
+### Code Pattern
+
+```java
+int position = findPosition(key, false);
+
+if (position != -1 && table[position] != null && !DELETED.equals(table[position])) {
+    if (table[position].value.equals(oldValue)) {
+        table[position].value = newValue;
+        return true;
+    }
+}
+
+return false;
+```
+
+### The Checks
+
+| Check | Why |
+|-------|-----|
+| `position != -1` | Key was found |
+| `table[position] != null` | Slot not empty |
+| `!DELETED.equals(...)` | Slot not deleted |
+| `value.equals(oldValue)` | Current value matches expected |
+
+### Visual
+
+```
+replace("TA102", Car2, Car99)
+
+[5] → ["TA101", Car1]
+[6] → ["TA102", Car2]   ← position = 6, value = Car2 = oldValue? YES!
+[7] → DELETED
+
+table[6].value = Car99
+
+[6] → ["TA102", Car99]
+
+return true
+```
+
+---
+
+## Summary: All HashMapOa Methods
+
+| Method | Key Points |
+|--------|------------|
+| `remove()` | Mark as DELETED, not null |
+| `containsValue()` | Skip null and DELETED |
+| `replace()` | Same as remove checks + value match |
+
+All methods use `findPosition(key, false)` to locate keys.
