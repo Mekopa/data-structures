@@ -268,7 +268,16 @@ public class HashMap<K, V> implements EvaluableMap<K, V> {
     }
 
     public boolean containsValue(Object value) {
-        throw new UnsupportedOperationException("Students need to implement containsValue(Object value)");
+        for (int i = 0; i < table.length; i++) {
+            Node<K, V> node = table[i];
+            while (node != null) {
+                if (node.value.equals(value)) {
+                    return true;
+                }
+                node = node.next;
+            }
+        }
+        return false;
     }
 
     /**
