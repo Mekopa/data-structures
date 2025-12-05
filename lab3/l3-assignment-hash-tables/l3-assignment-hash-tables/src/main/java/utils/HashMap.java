@@ -264,7 +264,19 @@ public class HashMap<K, V> implements EvaluableMap<K, V> {
     }
 
     public boolean replace(K key, V oldValue, V newValue) {
-        throw new UnsupportedOperationException("Students need to implement replace(K key, V oldValue, V newValue)");
+        if (key == null) {
+            throw new IllegalArgumentException("Key is null in replace(K key, V oldValue, V newValue)");
+        }
+
+        int index = HashManager.hash(key.hashCode(), table.length, ht);
+        Node<K, V> node = getInChain(key, table[index]);
+
+        if (node != null && node.value.equals(oldValue)) {
+            node.value = newValue;
+            return true;
+        }
+
+        return false;
     }
 
     public boolean containsValue(Object value) {
