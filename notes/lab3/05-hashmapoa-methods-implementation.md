@@ -1,0 +1,107 @@
+# HashMapOa Methods Implementation (Open Addressing)
+
+## Overview
+
+Three methods implemented in `HashMapOa.java`:
+
+| Method | Purpose | Time Complexity |
+|--------|---------|-----------------|
+| `remove(K key)` | Delete key-value pair (mark DELETED) | O(1) avg, O(n) worst |
+| `containsValue(Object value)` | Check if value exists | O(n) |
+| `replace(K key, V oldValue, V newValue)` | Conditional replace | O(1) avg, O(n) worst |
+
+---
+
+## Key Difference from HashMap
+
+| Aspect | HashMap (Separate Chaining) | HashMapOa (Open Addressing) |
+|--------|----------------------------|----------------------------|
+| Delete | Remove node from linked list | Mark as `DELETED` |
+| Helper | `getInChain()` | `findPosition()` |
+| Slot | Linked list | Single Entry |
+
+---
+
+## Method 1: remove(K key)
+
+### What It Does
+Finds the key and marks the slot as `DELETED` (not null!).
+
+### Why DELETED, Not Null?
+
+```
+If we use null:
+[5] John
+[6] null    ← was Jane, now empty
+[7] Jim     ← can't find this anymore!
+
+Search for Jim stops at [6] because it's empty.
+
+If we use DELETED:
+[5] John
+[6] DELETED ← "keep searching!"
+[7] Jim     ← found!
+```
+
+### Code Pattern
+
+```java
+int position = findPosition(key, false);  // Find where key is
+
+if (position != -1 && table[position] != null && !DELETED.equals(table[position])) {
+    V value = table[position].value;
+    table[position] = DELETED;  // Mark, don't null!
+    size--;
+    return value;
+}
+
+return null;
+```
+
+### Visual
+
+```
+remove("Jane")
+
+Before:
+[5] John
+[6] Jane   ← position = 6
+[7] Jim
+
+table[6] = DELETED;
+
+After:
+[5] John
+[6] DELETED
+[7] Jim
+
+return: Jane's value
+```
+
+### The Three Checks Explained
+
+```java
+if (position != -1 && table[position] != null && !DELETED.equals(table[position]))
+```
+
+| Check | Why |
+|-------|-----|
+| `position != -1` | findPosition found something |
+| `table[position] != null` | Slot is not empty |
+| `!DELETED.equals(table[position])` | Slot is not already deleted |
+
+---
+
+## Helper Method: findPosition()
+
+```java
+private int findPosition(K key, boolean stopAtDeleted)
+```
+
+| Parameter | Meaning |
+|-----------|---------|
+| `key` | What to search for |
+| `stopAtDeleted = true` | Stop at DELETED slots (for inserting) |
+| `stopAtDeleted = false` | Skip DELETED slots (for searching/removing) |
+
+**For remove:** Use `false` - we need to find the actual key, not stop at deleted slots.
