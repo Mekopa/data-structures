@@ -425,7 +425,7 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
             throw new IllegalArgumentException("Element is null in headSet(E element)");
         }
 
-        BstSet<E> result = new BstSet<>(c);  // Create new set with same comparator
+        BstSet<E> result = new BstSet<E>(c);  // Create new set with same comparator
 
         // Traverse this set and add elements that are less than the limit
         for (E e : this) {
@@ -453,7 +453,7 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
             throw new IllegalArgumentException("element1 must be <= element2");
         }
 
-        BstSet<E> result = new BstSet<>(c);  // Create new set with same comparator
+        BstSet<E> result = new BstSet<E>(c);  // Create new set with same comparator
 
         // Traverse this set and add elements in range [element1, element2)
         for (E e : this) {
@@ -477,7 +477,7 @@ public class BstSet<E extends Comparable<E>> implements SortedSet<E>, Cloneable 
             throw new IllegalArgumentException("Element is null in tailSet(E element)");
         }
 
-        BstSet<E> result = new BstSet<>(c);  // Create new set with same comparator
+        BstSet<E> result = new BstSet<E>(c);  // Create new set with same comparator
 
         // Traverse this set and add elements that are greater than or equal to the limit
         for (E e : this) {
