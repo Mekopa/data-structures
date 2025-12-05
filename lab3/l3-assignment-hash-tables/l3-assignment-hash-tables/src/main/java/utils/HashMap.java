@@ -175,7 +175,39 @@ public class HashMap<K, V> implements EvaluableMap<K, V> {
      */
     @Override
     public V remove(K key) {
-        throw new UnsupportedOperationException("Students need to implement remove(K key)");
+        if (key == null) {
+            throw new IllegalArgumentException("Key is null in remove(K key)");
+        }
+
+        int index = HashManager.hash(key.hashCode(), table.length, ht);
+        Node<K, V> current = table[index];
+
+        // Case: empty slot
+        if (current == null) {
+            return null;
+        }
+
+        // Case: key is at head
+        if (current.key.equals(key)) {
+            V value = current.value;
+            table[index] = current.next;
+            size--;
+            return value;
+        }
+
+        // Case: key is somewhere in the chain
+        while (current.next != null) {
+            if (current.next.key.equals(key)) {
+                V value = current.next.value;
+                current.next = current.next.next;
+                size--;
+                return value;
+            }
+            current = current.next;
+        }
+
+        // Not found
+        return null;
     }
 
     /**
