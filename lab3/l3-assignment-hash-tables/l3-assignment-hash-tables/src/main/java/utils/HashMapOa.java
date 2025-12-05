@@ -273,7 +273,14 @@ public class HashMapOa<K, V> implements EvaluableMap<K, V> {
     }
 
     public boolean containsValue(Object value) {
-        throw new UnsupportedOperationException("Students must implement the method containsValue(Object value)");
+        for (int i = 0; i < table.length; i++) {
+            if (table[i] != null && !DELETED.equals(table[i])) {
+                if (table[i].value.equals(value)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     protected static class Entry<K, V> {
