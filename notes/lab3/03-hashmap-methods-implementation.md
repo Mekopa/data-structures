@@ -91,6 +91,62 @@ table[2] → [Car2] → [Car3]   ← YES! return true
 
 ---
 
+## Method 3: replace(K key, V oldValue, V newValue)
+
+### What It Does
+Replace value **only if** current value matches `oldValue`. A safety check.
+
+### Why Use This?
+Prevents overwriting someone else's changes:
+
+```
+Person A reads: Toyota = $5000
+Person B reads: Toyota = $5000
+Person B changes: Toyota = $7000
+Person A tries: replace(Toyota, $5000, $6000)
+   → FAILS because value is now $7000, not $5000
+```
+
+### Three Conditions
+
+| Check | If fails... |
+|-------|-------------|
+| Key exists? | return false |
+| Current value equals oldValue? | return false |
+| Both pass? | Replace and return true |
+
+### Code Pattern
+
+```java
+int index = HashManager.hash(key.hashCode(), table.length, ht);
+Node<K, V> node = getInChain(key, table[index]);  // Reuse helper!
+
+if (node != null && node.value.equals(oldValue)) {
+    node.value = newValue;
+    return true;
+}
+
+return false;
+```
+
+### Visual
+
+```
+replace("TA102", Car2, Car99)
+
+Step 1: Find "TA102"
+table[2] → ["TA102", Car2]  ← Found!
+
+Step 2: Does Car2 equal oldValue (Car2)?  ← YES!
+
+Step 3: Replace
+table[2] → ["TA102", Car99]
+
+return true
+```
+
+---
+
 ## Key vs Value Search
 
 | Search Type | Method | Can Use Hash? | Complexity |
