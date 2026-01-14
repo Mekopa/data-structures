@@ -3,187 +3,250 @@
 **Variant:** #6
 **Comparison:** `BstSet.remove()` vs `java.util.TreeSet.remove()`
 **Author:** Mekopa
-**Date:** December 2025
+**Date:** January 2026
 
 ---
 
-## 1. Description of Benchmarked Methods
+## 1. Introduction
 
-### 1.1 BstSet.remove(E element)
+This report compares the performance of a custom Binary Search Tree implementation (`BstSet`) against Java's standard library `TreeSet` for the remove operation. The comparison is conducted under two scenarios:
 
-A custom implementation of a Binary Search Tree (BST) remove operation. This method removes an element from an unbalanced BST using the standard three-case deletion algorithm:
+1. **Random data** - Elements inserted in random order (average case)
+2. **Sorted data** - Elements inserted in sorted order (worst case for unbalanced BST)
 
-- **Case 1 (Leaf):** Node has no children - simply remove the node
-- **Case 2 (One Child):** Node has one child - replace node with its child
-- **Case 3 (Two Children):** Node has two children - replace with in-order predecessor (maximum value in left subtree), then remove the predecessor
+---
 
-**Implementation Characteristics:**
+## 2. Description of Benchmarked Methods
+
+### 2.1 BstSet.remove(E element)
+
+A custom implementation of an **unbalanced** Binary Search Tree remove operation using the standard three-case deletion algorithm:
+
+- **Case 1 (Leaf):** Node has no children → remove the node
+- **Case 2 (One Child):** Node has one child → replace node with its child
+- **Case 3 (Two Children):** Replace with in-order predecessor, then remove predecessor
+
+**Characteristics:**
 - Recursive implementation
-- Uses predecessor approach for two-children case
 - No self-balancing mechanism
-- Custom comparator support
+- Tree shape depends on insertion order
 
-### 1.2 java.util.TreeSet.remove(Object o)
+### 2.2 java.util.TreeSet.remove(Object o)
 
-Java's standard library implementation based on a Red-Black Tree (a self-balancing BST). TreeSet is backed by a TreeMap which uses Red-Black tree internally.
+Java's standard library implementation based on a **Red-Black Tree** (self-balancing BST).
 
-**Implementation Characteristics:**
+**Characteristics:**
 - Self-balancing (maintains O(log n) height)
-- Uses Red-Black tree rotations after deletion
-- Highly optimized JDK implementation
-- Thread-safe considerations in design
+- Rotations and color adjustments after modifications
+- Guaranteed performance regardless of input order
 
 ---
 
-## 2. Computational Complexity Analysis
+## 3. Computational Complexity Analysis
 
-### 2.1 Theoretical Complexity
+| Scenario | BstSet | TreeSet |
+|----------|--------|---------|
+| **Random data** | O(log n) average | O(log n) guaranteed |
+| **Sorted data** | O(n) - degenerates to linked list | O(log n) guaranteed |
+| **Removing all n elements** | O(n log n) to O(n²) | O(n log n) always |
 
-| Operation | BstSet (Unbalanced) | TreeSet (Red-Black) |
-|-----------|---------------------|---------------------|
-| Single remove() | O(h) where h = height | O(log n) guaranteed |
-| Best case | O(log n) - balanced | O(log n) |
-| Worst case | O(n) - degenerate/skewed | O(log n) |
-| Average case | O(log n) - random data | O(log n) |
+### Why Sorted Data is Problematic for BstSet
 
-### 2.2 Total Complexity for Removing All Elements
+When elements are inserted in sorted order:
 
-When removing all n elements from a tree:
+```
+Insert: 1, 2, 3, 4, 5
 
-- **BstSet:** O(n * h) where h varies
-  - Best: O(n log n) for balanced tree
-  - Worst: O(n^2) for skewed tree
+BstSet becomes:          TreeSet remains balanced:
+    1                           2
+     \                         / \
+      2                       1   4
+       \                         / \
+        3                       3   5
+         \
+          4
+           \
+            5
 
-- **TreeSet:** O(n log n) guaranteed due to self-balancing
-
-### 2.3 Space Complexity
-
-Both implementations use O(n) space for storing n elements. The recursive remove operation uses O(h) stack space.
+Height = n               Height = log(n)
+```
 
 ---
 
-## 3. Benchmark Methodology
+## 4. Benchmark Methodology
 
-### 3.1 Benchmarking Framework
+### 4.1 Framework & Configuration
 
 **Tool:** JMH (Java Microbenchmark Harness) version 1.25.2
 **JVM:** OpenJDK 17.0.16, 64-Bit Server VM
 
-### 3.2 Benchmark Configuration
-
 ```
 Benchmark Mode:     Average Time (avgt)
-Output Unit:        Microseconds (us/op)
+Output Unit:        Microseconds (μs/op)
 Warmup:             3 iterations, 1 second each
 Measurement:        5 iterations, 1 second each
 Forks:              1
-Threads:            1 (single-threaded)
+Input Sizes:        10,000 / 20,000 / 40,000 / 80,000 elements
 ```
 
-### 3.3 Test Data
+### 4.2 Test Scenarios
 
-- **Data Type:** Car objects with price-based comparison
-- **Generation:** Random shuffled data using CarsGenerator
-- **Input Sizes:** 10,000 / 20,000 / 40,000 / 80,000 elements
+| Scenario | Data Generation | Purpose |
+|----------|-----------------|---------|
+| **Random** | `CarsGenerator.generateShuffle()` | Average case performance |
+| **Sorted** | Random generation + `Arrays.sort()` | Worst case for BstSet |
 
-### 3.4 Benchmark Procedure
+### 4.3 Procedure
 
 For each measurement:
-1. **Setup (per iteration):** Generate array of n random Car objects
-2. **Setup (per invocation):** Create fresh tree and add all elements
-3. **Measure:** Remove all elements one by one, measure total time
-4. **Repeat:** 5 measurement iterations after 3 warmup iterations
-
-This ensures each benchmark starts with a fully populated tree.
+1. Generate array of n Car objects (random or sorted)
+2. Build tree by inserting all elements
+3. Remove all elements one by one
+4. Measure total time
 
 ---
 
-## 4. Results
+## 5. Results
 
-### 4.1 Raw Data
+### 5.1 Random Data Results
 
-| Input Size (n) | BstSet.remove() (μs) | Error (±) | TreeSet.remove() (μs) | Error (±) |
-|----------------|----------------------|-----------|----------------------|-----------|
-| 10,000 | 1,028.03 | 95.89 | 1,155.94 | 60.98 |
-| 20,000 | 2,432.71 | 116.86 | 2,693.42 | 12.65 |
-| 40,000 | 5,837.39 | 74.42 | 6,384.91 | 300.40 |
-| 80,000 | 14,232.25 | 1,118.10 | 15,311.07 | 652.15 |
+| Input Size | BstSet (μs) | Error (±) | TreeSet (μs) | Error (±) | Winner |
+|------------|-------------|-----------|--------------|-----------|--------|
+| 10,000 | 1,028 | 95.9 | 1,156 | 61.0 | BstSet (**11% faster**) |
+| 20,000 | 2,433 | 116.9 | 2,693 | 12.6 | BstSet (**10% faster**) |
+| 40,000 | 5,837 | 74.4 | 6,385 | 300.4 | BstSet (**9% faster**) |
+| 80,000 | 14,232 | 1,118.1 | 15,311 | 652.1 | BstSet (**7% faster**) |
 
-### 4.2 Performance Comparison Graphs
+### 5.2 Sorted Data Results
 
-#### Line Graph with Error Bars
-![Benchmark Line Graph](../benchmarks/benchmark_graph.png)
+| Input Size | BstSet (μs) | TreeSet (μs) | Winner |
+|------------|-------------|--------------|--------|
+| 10,000 | 34 | 287 | BstSet |
+| 20,000 | 79 | 577 | BstSet |
+| 40,000 | **CRASH** | 1,376 | TreeSet |
+| 80,000 | **CRASH** | 6,377 | TreeSet |
+
+**Critical Finding:** BstSet crashes with `StackOverflowError` at 40,000+ sorted elements!
+
+### 5.3 Performance Comparison Graph
+
+#### Random Data: BstSet vs TreeSet
+![Benchmark Graph - Random Data](benchmarks/benchmark_graph.png)
 
 #### Bar Chart Comparison
-![Benchmark Bar Chart](../benchmarks/benchmark_bar_chart.png)
+![Benchmark Bar Chart](benchmarks/benchmark_bar_chart.png)
 
-### 4.3 Scaling Analysis
+#### Sorted Data: BstSet Crashes!
+![Benchmark Sorted Data](benchmarks/benchmark_sorted.png)
 
-| n₁ → n₂ | Ratio | BstSet Time Ratio | TreeSet Time Ratio | Expected O(n log n) |
-|---------|-------|-------------------|--------------------|--------------------|
-| 10k → 20k | 2x | 2.37x | 2.33x | ~2.15x |
-| 20k → 40k | 2x | 2.40x | 2.37x | ~2.14x |
-| 40k → 80k | 2x | 2.44x | 2.40x | ~2.13x |
+#### Complete Analysis (Combined View)
+![Benchmark Combined](benchmarks/benchmark_combined.png)
 
 ---
 
-## 5. Conclusions
+## 6. Analysis
 
-### 5.1 Consistency with Theoretical Complexity
+### 6.1 Random Data Analysis
 
-**Finding:** The experimental results are **consistent** with O(n log n) complexity for both implementations.
+**Observation:** BstSet is 7-11% faster than TreeSet with random data.
 
-**Evidence:**
-- When input size doubles, execution time increases by approximately 2.3-2.4x
-- For pure O(n) complexity, we would expect exactly 2x increase
-- For O(n log n), the expected ratio is ~2.15x (accounting for the log factor)
-- The observed ratios (2.3-2.4x) are slightly higher due to:
-  - Cache effects at larger sizes
-  - Memory allocation overhead
-  - JVM garbage collection
+**Explanation:**
+1. **No rebalancing overhead** - BstSet doesn't perform rotations after deletion
+2. **Simpler code path** - Fewer operations per remove() call
+3. **Random data keeps BstSet balanced** - Height stays approximately O(log n)
 
-### 5.2 Why BstSet is Faster Than TreeSet
+**Scaling verification:**
 
-**Surprising Result:** Custom BstSet outperforms Java's optimized TreeSet by ~7-10%
+| Size Change | BstSet Ratio | TreeSet Ratio | Expected O(n log n) |
+|-------------|--------------|---------------|---------------------|
+| 10k → 20k | 2.37x | 2.33x | ~2.15x |
+| 20k → 40k | 2.40x | 2.37x | ~2.14x |
+| 40k → 80k | 2.44x | 2.40x | ~2.13x |
 
-**Reasons:**
-1. **No Rebalancing Overhead:** BstSet doesn't perform rotations after deletion, while TreeSet (Red-Black) must rebalance to maintain height guarantees
+Both implementations show O(n log n) behavior with random data.
 
-2. **Simpler Code Path:** BstSet's straightforward recursive deletion has fewer branches and operations than Red-Black tree's complex deletion with color adjustments
+### 6.2 Sorted Data Analysis
 
-3. **Test Data Characteristics:** Random shuffled data creates reasonably balanced BSTs, minimizing BstSet's worst-case scenarios
+**Observation:** BstSet crashes with StackOverflowError at 40,000 elements.
 
-4. **JVM Optimization:** The simple recursive pattern in BstSet may be better optimized by JIT compiler
-
-### 5.3 When Each Would Be Better
-
-| Scenario | Better Choice | Reason |
-|----------|---------------|--------|
-| Random data, performance-critical | BstSet | Lower constant factors |
-| Sorted/sequential data | TreeSet | Guaranteed O(log n) height |
-| Unknown data patterns | TreeSet | Consistent performance |
-| Simple use cases | BstSet | Easier to understand/modify |
-
-### 5.4 Final Verdict
-
-For **Variant #6** comparison:
-
-- **BstSet.remove()** is approximately **10% faster** than **TreeSet.remove()** with random data
-- Both exhibit O(n log n) behavior when removing all elements
-- TreeSet provides better **worst-case guarantees** but at the cost of rebalancing overhead
-- BstSet is faster for average cases but vulnerable to degenerate inputs
-
----
-
-## Appendix: Benchmark Configuration
-
+**Root Cause:**
 ```java
-@BenchmarkMode(Mode.AverageTime)
-@State(Scope.Benchmark)
-@OutputTimeUnit(TimeUnit.MICROSECONDS)
-@Warmup(time = 1, timeUnit = TimeUnit.SECONDS)
-@Measurement(time = 1, timeUnit = TimeUnit.SECONDS)
-@Param({"10000", "20000", "40000", "80000"})
+// BstSet.addRecursive() - recursive insertion
+private BstNode<E> addRecursive(E element, BstNode<E> node) {
+    if (node == null) { return new BstNode<>(element); }
+    // ... recursive call creates stack frame for each level
+    node.right = addRecursive(element, node.right);
+    return node;
+}
 ```
 
-**Full benchmark code available in:** `src/main/java/demo/Benchmark.java`
+With sorted data:
+- Tree height = n (number of elements)
+- Each insertion adds one stack frame
+- 40,000 stack frames exceeds Java's default stack size
+- **Result: StackOverflowError**
+
+**TreeSet remains stable** because Red-Black balancing keeps height at ~16 levels for 40,000 elements.
+
+### 6.3 Why BstSet Appears Faster at 10k-20k Sorted
+
+The small sorted tests (10k, 20k) show BstSet faster because:
+- Removal happens in sorted order (same as insertion order)
+- Each removal is from the "top" of the linked list
+- This is O(1) per removal, not O(n)
+
+However, this **masks the real problem** - the tree is already broken (StackOverflow at build time for larger sizes).
+
+---
+
+## 7. Conclusions
+
+### 7.1 Summary of Findings
+
+| Metric | Random Data | Sorted Data |
+|--------|-------------|-------------|
+| **Performance winner** | BstSet (~10% faster) | TreeSet (BstSet crashes) |
+| **Reliability** | Both stable | Only TreeSet stable |
+| **Complexity observed** | O(n log n) both | O(n log n) TreeSet only |
+
+### 7.2 When to Use Each Implementation
+
+| Scenario | Recommendation | Reason |
+|----------|----------------|--------|
+| Learning/educational | BstSet | Simpler to understand |
+| Controlled random input | BstSet | 10% faster |
+| Unknown input patterns | **TreeSet** | Prevents crashes |
+| Production systems | **TreeSet** | Guaranteed reliability |
+
+### 7.3 Final Verdict
+
+**The 10% performance advantage of BstSet is not worth the risk of StackOverflowError.**
+
+For Variant #6:
+- BstSet wins on **speed** with random data
+- TreeSet wins on **reliability** with any data
+- In real-world applications where input cannot be guaranteed random, **TreeSet is the only safe choice**
+
+---
+
+## Appendix A: Benchmark Code
+
+```java
+// Random data generation
+static Car[] generateElements(int count) {
+    return new CarsGenerator().generateShuffle(count, 1.0);
+}
+
+// Sorted data generation
+static Car[] generateSortedElements(int count) {
+    Car[] cars = new CarsGenerator().generateShuffle(count, 1.0);
+    Arrays.sort(cars, Car.byPrice);
+    return cars;
+}
+```
+
+**Full benchmark code:** `src/main/java/demo/Benchmark.java`
+
+## Appendix B: Raw Data
+
+See `benchmarks/results.csv` for complete benchmark data.

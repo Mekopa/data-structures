@@ -11,6 +11,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.util.Arrays;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
@@ -61,6 +62,46 @@ public class Benchmark {
         }
     }
 
+    // State for BstSet remove benchmark with SORTED data
+    @State(Scope.Benchmark)
+    public static class BstSortedSet {
+
+        Car[] cars;
+        BstSet<Car> carSet;
+
+        @Setup(Level.Iteration)
+        public void generateElements(BenchmarkParams params) {
+            cars = Benchmark.generateSortedElements(Integer.parseInt(params.getParam("elementCount")));
+        }
+
+        @Setup(Level.Invocation)
+        public void fillCarSet(BenchmarkParams params) {
+            carSet = new BstSet<>(Car.byPrice);
+            addElements(cars, carSet);
+        }
+    }
+
+    // State for TreeSet remove benchmark with SORTED data
+    @State(Scope.Benchmark)
+    public static class TreeSetSortedSet {
+
+        Car[] cars;
+        TreeSet<Car> treeSet;
+
+        @Setup(Level.Iteration)
+        public void generateElements(BenchmarkParams params) {
+            cars = Benchmark.generateSortedElements(Integer.parseInt(params.getParam("elementCount")));
+        }
+
+        @Setup(Level.Invocation)
+        public void fillTreeSet(BenchmarkParams params) {
+            treeSet = new TreeSet<>(Car.byPrice);
+            for (Car car : cars) {
+                treeSet.add(car);
+            }
+        }
+    }
+
     @Param({"10000", "20000", "40000", "80000"})
     public int elementCount;
 
@@ -73,6 +114,13 @@ public class Benchmark {
 
     static Car[] generateElements(int count) {
         return new CarsGenerator().generateShuffle(count, 1.0);
+    }
+
+    // Generate SORTED data (worst case for BstSet)
+    static Car[] generateSortedElements(int count) {
+        Car[] cars = new CarsGenerator().generateShuffle(count, 1.0);
+        Arrays.sort(cars, Car.byPrice);
+        return cars;
     }
 
     @org.openjdk.jmh.annotations.Benchmark
@@ -111,6 +159,23 @@ public class Benchmark {
             state.treeSet.remove(car);
         }
     }
+
+    // Variant #6 Extended: BstSet.remove() with SORTED data (worst case)
+    @org.openjdk.jmh.annotations.Benchmark
+    public void removeBstSorted(BstSortedSet state) {
+        for (Car car : state.cars) {
+            state.carSet.remove(car);
+        }
+    }
+
+    // Variant #6 Extended: TreeSet.remove() with SORTED data
+    @org.openjdk.jmh.annotations.Benchmark
+    public void removeTreeSetSorted(TreeSetSortedSet state) {
+        for (Car car : state.cars) {
+            state.treeSet.remove(car);
+        }
+    }
+
     public static void addElements(Car[] carArray, SortedSet<Car> carSet) {
         for (Car car : carArray) {
             carSet.add(car);
